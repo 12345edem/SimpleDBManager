@@ -1,0 +1,62 @@
+@model User
+
+@{
+    ViewData["Title"] = "Update user";
+}
+
+<form asp-controller="User" asp-action="Update" method="post">
+    <div class="form-group">
+        <input class="form-control" type="hidden" name="id" asp-for="Id" placeholder="New name" value="@Model.Id">
+    </div>
+    <div class="form-group">
+        <label >Name</label>
+        <input class="form-control" type="text" name="name" asp-for="Name" placeholder="New name" value="@Model.Name">
+    </div>
+    <div class="form-group">
+        <label>Sex</label>
+        <select required class="form-control" name="sex" asp-for="Sex" placeholder="New sex" value="@Model.Sex">
+            <option>M</option>
+            <option>F</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Weight</label>
+        <input required type="text" class="form-control" name="weight" asp-for="Weight" placeholder="New weight" value="@Model.Weight">
+    </div>
+        <input type="submit" value="Update user">
+</form>
+<br>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                User ID
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Sex
+            </th>
+            <th>
+                Weight(kg)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Sex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Weight)
+            </td>
+        </tr>
+    </tbody>
+</table>

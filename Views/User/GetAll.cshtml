@@ -1,0 +1,52 @@
+@model List<Task15.Models.User>
+
+@{
+    ViewData["Title"] = "All users";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                User ID
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Sex
+            </th>
+            <th>
+                Weight(kg)
+            </th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var user in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => user.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.Sex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.Weight)
+            </td>
+            <td>
+                <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id">Delete user</a>
+            </td>
+            <td>
+                <a asp-controller="User" asp-action="UpdateIndex" asp-route-id="@user.Id">Update user</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

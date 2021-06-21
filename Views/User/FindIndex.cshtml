@@ -1,0 +1,58 @@
+@model List<Task15.Models.User>
+
+@{
+    ViewData["Title"] = "Find users";
+}
+
+<form asp-controller="User" asp-action="Find" method="post">
+    <div class="form-group">
+        <label>Name</label>
+        <input required class="form-control" type="text" placeholder="Name" name="name">
+    </div>
+    <input type="submit" value="Find users">
+</form>
+    <button>
+        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="GetAll">Show all users</a>
+    </button>
+<br>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                User ID
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Sex
+            </th>
+            <th>
+                Weight(kg)
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var user in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => user.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.Sex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.Weight)
+            </td>
+             <td>
+                <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id">Delete user</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
