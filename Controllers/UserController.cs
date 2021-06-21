@@ -13,8 +13,8 @@ namespace Task15.Controllers
 {
     public class UserController : Controller
     {
-        DBcontext dbcontext;
-        ISessionFactory sessionFactory;
+        private DBcontext dbcontext;
+        private ISessionFactory sessionFactory;
         public UserController()
         {
             dbcontext =  new DBcontext();
