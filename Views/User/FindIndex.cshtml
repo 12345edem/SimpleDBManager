@@ -1,13 +1,9 @@
-@model List<Task15.Models.User>
 
 @{
     ViewData["Title"] = "Find users";
 }
 
 <form asp-controller="User" asp-action="Find" method="post">
-    <div class="form-group">
-        <label>Login</label>
-        <input required class="form-control" type="text" placeholder="Login" name="login">
-    </div>
+    
     <input type="submit" value="Find users">
 </form>

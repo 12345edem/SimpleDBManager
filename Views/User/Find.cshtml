@@ -7,7 +7,15 @@
 <form asp-controller="User" asp-action="Find" method="post">
     <div class="form-group">
         <label>Login</label>
-        <input required class="form-control" type="text" placeholder="Login" name="login">
+        <input class="form-control" type="text" placeholder="Login" name="login">
+    </div>
+    <div class="form-group">
+        <label>Name</label>
+        <input class="form-control" type="text" placeholder="Name" name="name">
+    </div>
+    <div class="form-group">
+        <label>Mininal salary</label>
+        <input class="form-control" type="number" placeholder="Salary" name="salary">
     </div>
     <input type="submit" value="Find users">
 </form>

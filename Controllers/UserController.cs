@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
@@ -15,32 +16,35 @@ namespace Task15.Controllers
     {
         private DBcontext dbcontext;
         private ISessionFactory sessionFactory;
+        public List<User> usersList;
         public UserController()
         {
             dbcontext =  new DBcontext();
+            usersList = new List<User>();
             sessionFactory = dbcontext.CreateSessionFactory();
         }
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             var users = new List<User>();
             using (var session = sessionFactory.OpenStatelessSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
-                    users = session.Query<User>().OrderBy(user => user.Id).ToList();
-                    transaction.Commit();
+                    await Task.Run(() => users = session.Query<User>().OrderBy(user => user.Id).ToList());
+                    await Task.Run(() => transaction.Commit());
                 }
                 session.Close();
             }
             sessionFactory.Close();
 
+            usersList = users;
             return View(users);
         }
         public IActionResult AddIndex()
         {
             return View();
         }
-        public IActionResult Add(User user)
+        public async Task<IActionResult> Add(User user)
         {
             user.Age = DateTime.Now.Year - user.BirthDay.Year;
 
@@ -50,15 +54,16 @@ namespace Task15.Controllers
             {
                 using(var transaction = session.BeginTransaction())
                 {
-                    session.Save(user);
-                    transaction.Commit();
+                    await Task.Run(() => session.Save(user));
+                    await Task.Run(() => transaction.Commit());
                 }
                 session.Close();
             }
             sessionFactory.Close();
+
             return RedirectToAction("AddIndex", "User");
         }
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             sessionFactory = dbcontext.CreateSessionFactory();
 
@@ -67,8 +72,8 @@ namespace Task15.Controllers
                 using(var transaction = session.BeginTransaction())
                 {
                     var user = session.Get<User>(id);
-                    session.Delete(user);
-                    transaction.Commit();
+                    await Task.Run(() => session.Delete(user));
+                    await Task.Run(() => transaction.Commit());
                 }
                 session.Close();
             }
@@ -80,43 +85,46 @@ namespace Task15.Controllers
         {
             return View();
         }
-        public IActionResult Find(string login)
+        public async Task<IActionResult> Find(string login, string name, float salary)
         {
             var users = new List<User>();
             using (var session = sessionFactory.OpenStatelessSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
-                    users = session.Query<User>().Where(u => u.Login == login).OrderBy(user => user.Id).ToList();
-                    transaction.Commit();
+                    await Task.Run(() => users = session.Query<User>().Where(u => u.Login == login).OrderBy(user => user.Id).ToList());
+                    await Task.Run(() => transaction.Commit());
                 }
                 session.Close();
             }
             sessionFactory.Close();
+
+            usersList = users;
             return View(users);
         }
-        public IActionResult UpdateIndex(int id)
+        public async Task<IActionResult> UpdateIndex(int id)
         {
             var user = new User();
             using (var session = sessionFactory.OpenStatelessSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
-                    user = session.Query<User>().Where(u => u.Id == id).FirstOrDefault();
-                    transaction.Commit();
+                    await Task.Run(() => user = session.Query<User>().Where(u => u.Id == id).FirstOrDefault());
+                    await Task.Run(() => transaction.Commit());
                 }
                 session.Close();
             }
             sessionFactory.Close();
+
             return View(user);
         }
-        public IActionResult Update(User updatedUser)
+        public async Task<IActionResult> Update(User updatedUser)
         {
             using (var session = sessionFactory.OpenStatelessSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
-                    var user = session.Get<User>(updatedUser.Id);
+                    var user =  session.Get<User>(updatedUser.Id);
                     user.Id = updatedUser.Id;
 
                     if(updatedUser.Login == default(string) || updatedUser.Login == "")
@@ -141,14 +149,14 @@ namespace Task15.Controllers
                     }
 
                     user = updatedUser;
-                    session.Update(user);
-                    transaction.Commit();
+                    await Task.Run(() => session.Update(user));
+                    await Task.Run(() => transaction.Commit());
                 }
                 session.Close();
             }
             sessionFactory.Close();
 
-            return RedirectToAction("GetAll", "User");
+            return RedirectToAction("UpdateIndex", "User");
         }
     }
 }
