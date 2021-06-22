@@ -13,9 +13,26 @@
         <label>Name</label>
         <input class="form-control" type="text" placeholder="Name" name="name">
     </div>
+    <!-- Sex -->
     <div class="form-group">
-        <label>Mininal salary</label>
+        <label >Sex</label>
+        <select class="form-control" name="sex">
+            <option>Any</option>
+            <option>M</option>
+            <option>F</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Salary</label>
         <input class="form-control" type="number" placeholder="Salary" name="salary">
+    </div>
+    <div class="form-group">
+        <label>Salary option</label>
+        <select class="form-control" name="salaryOption" value="Equals">
+            <option>Equals</option>
+            <option>More Than</option>
+            <option>Less Than</option>
+        </select>
     </div>
     <input type="submit" value="Find users">
 </form>

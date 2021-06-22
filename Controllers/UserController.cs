@@ -85,14 +85,46 @@ namespace Task15.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> Find(string login, string name, float salary)
+        public async Task<IActionResult> Find(string login, string name, 
+            float salary, string salaryOption, string sex)
         {
+            if(sex == "Any") sex = default(string);
+
             var users = new List<User>();
+
+
             using (var session = sessionFactory.OpenStatelessSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
-                    await Task.Run(() => users = session.Query<User>().Where(u => u.Login == login).OrderBy(user => user.Id).ToList());
+                    switch (salaryOption)
+                    {
+                        case "More Than": await Task.Run(() => users = session.Query<User>()
+                            .Where(u => name ==   default(string)  || u.Name == name)
+                            .Where(u => login ==  default(string)  || u.Login == login)
+                            .Where(u => salary == default(float) || u.Salary > salary)
+                            .Where(u => sex == default(string) || u.Sex == sex)
+                            .OrderBy(user => user.Id)   
+                            .ToList());  
+                            break;
+                        case "Less Than": await Task.Run(() => users = session.Query<User>()
+                            .Where(u => name ==   default(string)  || u.Name == name)
+                            .Where(u => login ==  default(string)  || u.Login == login)
+                            .Where(u => salary == default(float) || u.Salary < salary)
+                            .Where(u => sex == default(string) || u.Sex ==  sex)
+                            .OrderBy(user => user.Id)
+                            .ToList());
+                            break;                       
+                        default: await Task.Run(() => users = session.Query<User>()
+                            .Where(u => name ==   default(string)  || u.Name == name)
+                            .Where(u => login ==  default(string)  || u.Login == login)
+                            .Where(u => salary == default(float) || u.Salary == salary)
+                            .Where(u => sex == default(string) || u.Sex ==  sex)
+                            .OrderBy(user => user.Id)
+                            .ToList());
+                            break;
+                    };
+                    
                     await Task.Run(() => transaction.Commit());
                 }
                 session.Close();
@@ -156,7 +188,7 @@ namespace Task15.Controllers
             }
             sessionFactory.Close();
 
-            return RedirectToAction("UpdateIndex", "User");
+            return RedirectToAction("Find", "User");
         }
     }
 }
