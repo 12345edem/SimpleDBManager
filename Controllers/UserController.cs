@@ -42,6 +42,8 @@ namespace Task15.Controllers
         }
         public IActionResult Add(User user)
         {
+            user.Age = DateTime.Now.Year - user.BirthDay.Year;
+
             sessionFactory = dbcontext.CreateSessionFactory();
 
             using(var session = sessionFactory.OpenSession())
@@ -76,16 +78,16 @@ namespace Task15.Controllers
         }
         public IActionResult FindIndex()
         {
-            return View(new List<User>());
+            return View();
         }
-        public IActionResult Find(string name)
+        public IActionResult Find(string login)
         {
             var users = new List<User>();
             using (var session = sessionFactory.OpenStatelessSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
-                    users = session.Query<User>().Where(u => u.Name == name).OrderBy(user => user.Id).ToList();
+                    users = session.Query<User>().Where(u => u.Login == login).OrderBy(user => user.Id).ToList();
                     transaction.Commit();
                 }
                 session.Close();
@@ -110,22 +112,34 @@ namespace Task15.Controllers
         }
         public IActionResult Update(User updatedUser)
         {
-            var user = new User();
             using (var session = sessionFactory.OpenStatelessSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
+                    var user = session.Get<User>(updatedUser.Id);
                     user.Id = updatedUser.Id;
-                    user = session.Get<User>(user.Id);
 
-                    if(updatedUser.Name == null || updatedUser.Name == "")
+                    if(updatedUser.Login == default(string) || updatedUser.Login == "")
                     {
-                        updatedUser.Name = session.Get<User>(user.Id).Name;
+                        updatedUser.Login = user.Login;
                     }
-                    if(updatedUser.Weight == 0)
+                    if(updatedUser.Name == default(string) || updatedUser.Name == "")
                     {
-                        updatedUser.Name = session.Get<User>(user.Id).Name;
+                        updatedUser.Name = user.Name;
                     }
+                    if(updatedUser.Salary == default(float))
+                    {
+                        updatedUser.Salary = user.Salary;
+                    }
+                    if(updatedUser.Age == default(int))
+                    {
+                        updatedUser.Age = user.Age;
+                    }
+                    if(updatedUser.BirthDay == default(DateTime))
+                    {
+                        updatedUser.BirthDay = user.BirthDay;
+                    }
+
                     user = updatedUser;
                     session.Update(user);
                     transaction.Commit();

@@ -4,33 +4,54 @@
     ViewData["Title"] = "Update user";
 }
 
+ <!-- Updating user -->
 <form asp-controller="User" asp-action="Update" method="post">
+    
+    <!-- Id(hidden field) -->
     <div class="form-group">
-        <input class="form-control" type="hidden" name="id" asp-for="Id" placeholder="New name" value="@Model.Id">
+        <input class="form-control" type="hidden" name="id" asp-for="Id" value="@Model.Id">
     </div>
+
+    <!-- New Login -->
+    <div class="form-group">
+        <label >Login</label>
+        <input class="form-control" type="text" name="login" asp-for="Login" placeholder="New login" value="@Model.Login">
+    </div>
+
+    <!-- New Name -->
     <div class="form-group">
         <label >Name</label>
         <input class="form-control" type="text" name="name" asp-for="Name" placeholder="New name" value="@Model.Name">
     </div>
+
+    <!-- New Sex -->
     <div class="form-group">
-        <label>Sex</label>
+        <label >Sex</label>
         <select required class="form-control" name="sex" asp-for="Sex" placeholder="New sex" value="@Model.Sex">
             <option>M</option>
             <option>F</option>
         </select>
     </div>
+
+    <!-- New Salary -->
     <div class="form-group">
-        <label>Weight</label>
-        <input required type="text" class="form-control" name="weight" asp-for="Weight" placeholder="New weight" value="@Model.Weight">
+        <label >Salary</label>
+        <input class="form-control" type="text" name="salary" asp-for="Salary" placeholder="New salary" value="@Model.Salary">
     </div>
-        <input type="submit" value="Update user">
+
+    <input type="submit" value="Update user">
 </form>
 <br>
+
+<!-- Users Table -->
 <table class="table">
     <thead>
         <tr>
             <th>
                 User ID
+            </th>
+            <th>
+                Login
             </th>
             <th>
                 Name
@@ -39,7 +60,17 @@
                 Sex
             </th>
             <th>
-                Weight(kg)
+                Salary
+            </th>
+            <th>
+                Age
+            </th>
+            <th>
+                BirthDay
+            </th>
+            <th>
+            </th>
+            <th>
             </th>
         </tr>
     </thead>
@@ -49,13 +80,28 @@
                 @Html.DisplayFor(modelItem => Model.Id)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => Model.Login)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => Model.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => Model.Sex)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => Model.Weight)
+                @Html.DisplayFor(modelItem => Model.Salary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.BirthDay)
+            </td>
+            <td>
+                <a asp-controller="User" asp-action="Delete" asp-route-id="@Model.Id">Delete user</a>
+            </td>
+            <td>
+                <a asp-controller="User" asp-action="UpdateIndex" asp-route-id="@Model.Id">Update user</a>
             </td>
         </tr>
     </tbody>

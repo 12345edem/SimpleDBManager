@@ -4,20 +4,39 @@
     ViewData["Title"] = "Add user";
 }
 <form asp-controller="User" asp-action="Add" method="post">
+   
+    <!-- Login -->
+    <div class="form-group">
+        <label >Login</label>
+        <input required class="form-control" type="text" name="login" asp-for="Login" placeholder="Login">
+    </div>
+
+    <!-- Name -->
     <div class="form-group">
         <label >Name</label>
         <input required class="form-control" type="text" name="name" asp-for="Name" placeholder="Name">
     </div>
+
+    <!-- Sex -->
     <div class="form-group">
-        <label>Sex</label>
+        <label >Sex</label>
         <select required class="form-control" name="sex" asp-for="Sex" placeholder="Sex">
             <option>M</option>
             <option>F</option>
         </select>
     </div>
+
+    <!-- Salary -->
     <div class="form-group">
-        <label>Weight</label>
-        <input required type="text" class="form-control" name="weight" asp-for="Weight" placeholder="Weight">
+        <label >Salary</label>
+        <input required class="form-control" type="number" name="salary" asp-for="Salary" placeholder="Salary">
     </div>
-        <input type="submit" value="Add user">
+
+    <!-- BirthDate -->
+    <div class="form-group">
+        <label >BirthDate</label>
+        <input required class="form-control" type="date" name="birthDay" asp-for="BirthDay" placeholder="BirthDay">
+    </div>
+
+    <input type="submit" value="Add user">
 </form>

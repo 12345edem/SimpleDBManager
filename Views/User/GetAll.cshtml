@@ -4,11 +4,15 @@
     ViewData["Title"] = "All users";
 }
 
+<!-- Users Table -->
 <table class="table">
     <thead>
         <tr>
             <th>
                 User ID
+            </th>
+            <th>
+                Login
             </th>
             <th>
                 Name
@@ -17,7 +21,13 @@
                 Sex
             </th>
             <th>
-                Weight(kg)
+                Salary
+            </th>
+            <th>
+                Age
+            </th>
+            <th>
+                BirthDay
             </th>
             <th>
             </th>
@@ -32,13 +42,22 @@
                 @Html.DisplayFor(modelItem => user.Id)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => user.Login)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => user.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => user.Sex)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => user.Weight)
+                @Html.DisplayFor(modelItem => user.Salary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.Age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => user.BirthDay)
             </td>
             <td>
                 <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id">Delete user</a>

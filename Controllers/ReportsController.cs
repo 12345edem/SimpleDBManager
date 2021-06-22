@@ -46,7 +46,7 @@ namespace Task15.Controllers
             {
                 foreach (var user in users)
                 {
-                    await sw.WriteLineAsync($"{user.Id}\t\t{user.Name}\t\t\t{user.Sex}\t\t{user.Weight}");
+                    await sw.WriteLineAsync($"{user.Id}\t\t{user.Name}\t\t\t{user.Sex}\t\t{user.Login}\t\t{user.Salary}\t\t{user.Age}\t\t{user.BirthDay}");
                 }
             }
 
