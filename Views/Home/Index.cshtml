@@ -2,17 +2,30 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<center>
+<table class="buttons">
+    
+    <tr><td>
     <button>
         <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="GetAll">Show all users</a>
     </button>
+    </td></tr>
+    
+    <tr><td>
     <button>
         <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="AddIndex">Add user</a>
     </button>
+    </td></tr>
+
+    <tr><td>
     <button>
         <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="FindIndex">Find users</a>
     </button>
+    </td></tr>
+
+    <tr><td>
     <button>
-        <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Report">Report all data</a>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="ReportIndex">Reports</a>
     </button>
+    </td></tr>
 </div>

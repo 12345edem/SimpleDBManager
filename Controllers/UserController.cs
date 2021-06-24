@@ -100,24 +100,24 @@ namespace Task15.Controllers
                     switch (salaryOption)
                     {
                         case "More Than": await Task.Run(() => users = session.Query<User>()
-                            .Where(u => name ==   default(string)  || u.Name == name)
-                            .Where(u => login ==  default(string)  || u.Login == login)
+                            .Where(u => name == default(string) || u.Name.Contains(name))
+                            .Where(u => login ==  default(string)  || u.Login.Contains(login))
                             .Where(u => salary == default(float) || u.Salary > salary)
                             .Where(u => sex == default(string) || u.Sex == sex)
                             .OrderBy(user => user.Id)   
                             .ToList());  
                             break;
                         case "Less Than": await Task.Run(() => users = session.Query<User>()
-                            .Where(u => name ==   default(string)  || u.Name == name)
-                            .Where(u => login ==  default(string)  || u.Login == login)
+                            .Where(u => name ==   default(string)  || u.Name.Contains(name))
+                            .Where(u => login ==  default(string)  || u.Login.Contains(login))
                             .Where(u => salary == default(float) || u.Salary < salary)
                             .Where(u => sex == default(string) || u.Sex ==  sex)
                             .OrderBy(user => user.Id)
                             .ToList());
                             break;                       
                         default: await Task.Run(() => users = session.Query<User>()
-                            .Where(u => name ==   default(string)  || u.Name == name)
-                            .Where(u => login ==  default(string)  || u.Login == login)
+                            .Where(u => name ==   default(string)  || u.Name.Contains(name))
+                            .Where(u => login ==  default(string)  || u.Login.Contains(login))
                             .Where(u => salary == default(float) || u.Salary == salary)
                             .Where(u => sex == default(string) || u.Sex ==  sex)
                             .OrderBy(user => user.Id)

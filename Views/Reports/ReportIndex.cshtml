@@ -1,0 +1,74 @@
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<center>
+<table class="buttons">
+    <tr>
+        Reports variants
+    </tr>
+    <tr>
+        <td>
+            <button>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetAll">Report all users</a>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <button>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetUniqueSalary">Report unique salaries</a>
+            </button>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+            <button>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetUniqueAges">Report unique ages</a>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <button>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetMaxAndMinSalary">Report min and max salary</a>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <button>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetSummarySalary">Report summary salary</a>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <button>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetSalary21And25">Report salaries of workers between 21 and 25 years old</a>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <button>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetAverageSalary">Report average salary</a>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <button>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetAverageAge">Report average salary</a>
+            </button>
+        </td>
+    </tr>
+</table>
+</center>
