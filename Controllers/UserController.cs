@@ -15,14 +15,16 @@ namespace Task15.Controllers
 {
     public class UserController : Controller
     {
-        private DBcontext dbcontext;
+        private DBContextBindings dBContextBindings;
+        private DBContext dbcontext;
         public ISessionFactory sessionFactory;
         public List<User> usersList;
         public UserController()
         {
-            dbcontext =  new DBcontext();
+            dBContextBindings = new DBContextBindings("localhost", 5432, "postgres", "postgres", "root");
+            dbcontext =  new DBContext();
             usersList = new List<User>();
-            sessionFactory = dbcontext.CreateSessionFactory();
+            sessionFactory = dbcontext.CreateSessionFactory(dBContextBindings);
         }
         public async Task<IActionResult> GetAll()
         {
@@ -49,8 +51,6 @@ namespace Task15.Controllers
         {
             user.Age = DateTime.Now.Year - user.BirthDay.Year;
 
-            sessionFactory = dbcontext.CreateSessionFactory();
-
             using(var session = sessionFactory.OpenSession())
             {
                 using(var transaction = session.BeginTransaction())
@@ -66,8 +66,6 @@ namespace Task15.Controllers
         }
         public async Task<IActionResult> Delete(int id)
         {
-            sessionFactory = dbcontext.CreateSessionFactory();
-
             using(var session = sessionFactory.OpenSession())
             {
                 using(var transaction = session.BeginTransaction())

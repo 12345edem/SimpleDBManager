@@ -23,7 +23,8 @@ namespace Task15.Reporters
 {
     public class Reporter<TData>
     {
-        private DBcontext dbcontext;
+        private DBContextBindings dBContextBindings;
+        private DBContext dbcontext;
         UserController userController = new UserController();
         private ISessionFactory sessionFactory;
         private readonly int FontSize = 8;
@@ -31,9 +32,9 @@ namespace Task15.Reporters
         public Reporter(string saveDir)
         {
             SaveDirectory = saveDir;
-
-            dbcontext = new DBcontext();
-            sessionFactory = dbcontext.CreateSessionFactory();
+            dBContextBindings = new DBContextBindings("localhost", 5432, "postgres", "postgres", "root");
+            dbcontext = new DBContext();
+            sessionFactory = dbcontext.CreateSessionFactory(dBContextBindings);
 
             System.Text.EncodingProvider encoding = System.Text.CodePagesEncodingProvider.Instance;
             Encoding.RegisterProvider(encoding);

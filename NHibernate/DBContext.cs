@@ -10,20 +10,20 @@ using Task15.Models;
 
 namespace Task15.NHibernate
 {
-    public class DBcontext
+    public class DBContext
     {
-        public ISessionFactory CreateSessionFactory()
+        public ISessionFactory CreateSessionFactory(DBContextBindings dBContextBindings)
         {
             return Fluently
                 .Configure()
                     .Database(
                         PostgreSQLConfiguration.Standard
                         .ConnectionString(c =>
-                            c.Host("localhost")
-                            .Port(5432)
-                            .Database("postgres")
-                            .Username("postgres")
-                            .Password("root")))
+                            c.Host(dBContextBindings.Host)
+                            .Port(dBContextBindings.Port)
+                            .Database(dBContextBindings.Database)
+                            .Username(dBContextBindings.Username)
+                            .Password(dBContextBindings.Password)))
                     .Mappings(m => m.FluentMappings.AddFromAssemblyOf<User>())
                     .ExposeConfiguration(TreatConfiguration)
                 .BuildSessionFactory();
