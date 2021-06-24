@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -15,7 +16,7 @@ namespace Task15.Controllers
     public class UserController : Controller
     {
         private DBcontext dbcontext;
-        private ISessionFactory sessionFactory;
+        public ISessionFactory sessionFactory;
         public List<User> usersList;
         public UserController()
         {

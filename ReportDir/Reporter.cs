@@ -21,7 +21,7 @@ using Task15.Controllers;
 
 namespace Task15.Reporters
 {
-    public class Reporter
+    public class Reporter<TData>
     {
         private DBcontext dbcontext;
         UserController userController = new UserController();
@@ -38,9 +38,9 @@ namespace Task15.Reporters
             System.Text.EncodingProvider encoding = System.Text.CodePagesEncodingProvider.Instance;
             Encoding.RegisterProvider(encoding);
         }
-        public FileResult CreateReport(List<User> users, string filename, string header)
+        public FileResult CreateReport(List<TData> data, string filename, string header)
         {
-            var fileName = DataToPdf(users, filename, header).Result;
+            var fileName = DataToPdf(data, filename, header).Result;
 
             var preparedFile = Path.Combine(SaveDirectory + "/", $"{fileName}.pdf");
             var download =  userController.File(System.IO.File.ReadAllBytes(preparedFile), "application/octet-stream", $"{fileName}.pdf");
@@ -55,6 +55,7 @@ namespace Task15.Reporters
 
             DataTable dataTable = new DataTable();
             dataTable.TableName = typeof(T).FullName;
+
             foreach (PropertyInfo info in properties)
             {
                 dataTable.Columns.Add(new DataColumn(info.Name, Nullable.GetUnderlyingType(info.PropertyType) ?? info.PropertyType));
@@ -73,9 +74,10 @@ namespace Task15.Reporters
 
             return dataTable;
         }
-        private async Task<string> DataToPdf(List<User> users, string fileName, string header)
+        private async Task<string> DataToPdf(List<TData> data, string fileName, string header)
         {
-            var usersTable = CreateDataTable<User>(users);
+            var usersTable = CreateDataTable<TData>(data);
+
             var file = new Document();
 
             file = new Document();
@@ -85,6 +87,7 @@ namespace Task15.Reporters
             BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             Font font = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);
             font.Size = FontSize;
+
 
             PdfPTable table = new PdfPTable(usersTable.Columns.Count);
             PdfPCell cell = new PdfPCell(new Phrase($"{header} {System.DateTime.Now}", font));
