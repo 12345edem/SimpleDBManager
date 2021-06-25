@@ -22,26 +22,21 @@ namespace Task15.Controllers
         public UserController()
         {
             dBContextBindings = new DBContextBindings("localhost", 5432, "postgres", "postgres", "root");
-            dbcontext =  new DBContext();
+            dbcontext = new DBContext();
             usersList = new List<User>();
             sessionFactory = dbcontext.CreateSessionFactory(dBContextBindings);
         }
         public async Task<IActionResult> GetAll()
         {
-            var users = new List<User>();
+            IQueryable<User> users = null;
             using (var session = sessionFactory.OpenStatelessSession())
             {
-                using (var transaction = session.BeginTransaction())
-                {
-                    await Task.Run(() => users = session.Query<User>().OrderBy(user => user.Id).ToList());
-                    await Task.Run(() => transaction.Commit());
-                }
+                await Task.Run(() => users = session.Query<User>().OrderBy(user => user.Id));
+                usersList = users.ToList();
                 session.Close();
             }
-            sessionFactory.Close();
 
-            usersList = users;
-            return View(users);
+            return View(usersList);
         }
         public IActionResult AddIndex()
         {
@@ -51,32 +46,31 @@ namespace Task15.Controllers
         {
             user.Age = DateTime.Now.Year - user.BirthDay.Year;
 
-            using(var session = sessionFactory.OpenSession())
+            using (var session = sessionFactory.OpenSession())
             {
-                using(var transaction = session.BeginTransaction())
+                using (var transaction = session.BeginTransaction())
                 {
                     await Task.Run(() => session.Save(user));
                     await Task.Run(() => transaction.Commit());
                 }
                 session.Close();
             }
-            sessionFactory.Close();
+
 
             return RedirectToAction("AddIndex", "User");
         }
         public async Task<IActionResult> Delete(int id)
         {
-            using(var session = sessionFactory.OpenSession())
+            using (var session = sessionFactory.OpenSession())
             {
-                using(var transaction = session.BeginTransaction())
+                var user = session.Get<User>(id);
+                using (var transaction = session.BeginTransaction())
                 {
-                    var user = session.Get<User>(id);
                     await Task.Run(() => session.Delete(user));
                     await Task.Run(() => transaction.Commit());
                 }
                 session.Close();
             }
-            sessionFactory.Close();
 
             return RedirectToAction("GetAll", "User");
         }
@@ -84,54 +78,46 @@ namespace Task15.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> Find(string login, string name, 
+        public async Task<IActionResult> Find(string login, string name,
             float salary, string salaryOption, string sex)
         {
-            if(sex == "Any") sex = default(string);
+            if (sex == "Any") sex = default(string);
 
-            var users = new List<User>();
-
+            IQueryable<User> users = null;
 
             using (var session = sessionFactory.OpenStatelessSession())
             {
-                using (var transaction = session.BeginTransaction())
+                switch (salaryOption)
                 {
-                    switch (salaryOption)
-                    {
-                        case "More Than": await Task.Run(() => users = session.Query<User>()
+                    case "More Than":
+                        await Task.Run(() => users = session.Query<User>()
                             .Where(u => name == default(string) || u.Name.Contains(name))
-                            .Where(u => login ==  default(string)  || u.Login.Contains(login))
+                            .Where(u => login == default(string) || u.Login.Contains(login))
                             .Where(u => salary == default(float) || u.Salary > salary)
                             .Where(u => sex == default(string) || u.Sex == sex)
-                            .OrderBy(user => user.Id)   
-                            .ToList());  
-                            break;
-                        case "Less Than": await Task.Run(() => users = session.Query<User>()
-                            .Where(u => name ==   default(string)  || u.Name.Contains(name))
-                            .Where(u => login ==  default(string)  || u.Login.Contains(login))
+                            .OrderBy(user => user.Id));
+                        break;
+                    case "Less Than":
+                        await Task.Run(() => users = session.Query<User>()
+                            .Where(u => name == default(string) || u.Name.Contains(name))
+                            .Where(u => login == default(string) || u.Login.Contains(login))
                             .Where(u => salary == default(float) || u.Salary < salary)
-                            .Where(u => sex == default(string) || u.Sex ==  sex)
-                            .OrderBy(user => user.Id)
-                            .ToList());
-                            break;                       
-                        default: await Task.Run(() => users = session.Query<User>()
-                            .Where(u => name ==   default(string)  || u.Name.Contains(name))
-                            .Where(u => login ==  default(string)  || u.Login.Contains(login))
+                            .Where(u => sex == default(string) || u.Sex == sex)
+                            .OrderBy(user => user.Id));
+                        break;
+                    default:
+                        await Task.Run(() => users = session.Query<User>()
+                            .Where(u => name == default(string) || u.Name.Contains(name))
+                            .Where(u => login == default(string) || u.Login.Contains(login))
                             .Where(u => salary == default(float) || u.Salary == salary)
-                            .Where(u => sex == default(string) || u.Sex ==  sex)
-                            .OrderBy(user => user.Id)
-                            .ToList());
-                            break;
-                    };
-                    
-                    await Task.Run(() => transaction.Commit());
-                }
+                            .Where(u => sex == default(string) || u.Sex == sex)
+                            .OrderBy(user => user.Id));
+                        break;
+                };
+                usersList = users.ToList();
                 session.Close();
             }
-            sessionFactory.Close();
-
-            usersList = users;
-            return View(users);
+            return View(usersList);
         }
         public async Task<IActionResult> UpdateIndex(int id)
         {
@@ -145,7 +131,6 @@ namespace Task15.Controllers
                 }
                 session.Close();
             }
-            sessionFactory.Close();
 
             return View(user);
         }
@@ -153,39 +138,39 @@ namespace Task15.Controllers
         {
             using (var session = sessionFactory.OpenStatelessSession())
             {
+                var user = session.Get<User>(updatedUser.Id);
+                user.Id = updatedUser.Id;
+
+                if (updatedUser.Login == default(string) || updatedUser.Login == "")
+                {
+                    updatedUser.Login = user.Login;
+                }
+                if (updatedUser.Name == default(string) || updatedUser.Name == "")
+                {
+                    updatedUser.Name = user.Name;
+                }
+                if (updatedUser.Salary == default(float))
+                {
+                    updatedUser.Salary = user.Salary;
+                }
+                if (updatedUser.Age == default(int))
+                {
+                    updatedUser.Age = user.Age;
+                }
+                if (updatedUser.BirthDay == default(DateTime))
+                {
+                    updatedUser.BirthDay = user.BirthDay;
+                }
+                user = updatedUser;
+
                 using (var transaction = session.BeginTransaction())
                 {
-                    var user =  session.Get<User>(updatedUser.Id);
-                    user.Id = updatedUser.Id;
 
-                    if(updatedUser.Login == default(string) || updatedUser.Login == "")
-                    {
-                        updatedUser.Login = user.Login;
-                    }
-                    if(updatedUser.Name == default(string) || updatedUser.Name == "")
-                    {
-                        updatedUser.Name = user.Name;
-                    }
-                    if(updatedUser.Salary == default(float))
-                    {
-                        updatedUser.Salary = user.Salary;
-                    }
-                    if(updatedUser.Age == default(int))
-                    {
-                        updatedUser.Age = user.Age;
-                    }
-                    if(updatedUser.BirthDay == default(DateTime))
-                    {
-                        updatedUser.BirthDay = user.BirthDay;
-                    }
-
-                    user = updatedUser;
                     await Task.Run(() => session.Update(user));
                     await Task.Run(() => transaction.Commit());
                 }
                 session.Close();
             }
-            sessionFactory.Close();
 
             return RedirectToAction("Find", "User");
         }
