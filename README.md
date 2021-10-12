@@ -1,4 +1,4 @@
-# SimpleDBManager
+# SimpleDbManager
 
 ## простой Web менеджер базы данных на  
 ```ASP.NET Core```
